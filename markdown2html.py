@@ -52,7 +52,7 @@ class MarkDown2HTML:
             parsed_line = self.parse_markdown_headings(line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
-            #parsed_line = self.parse_paragraph(parsed_line, index)
+            parsed_line = self.parse_paragraph(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -142,7 +142,13 @@ class MarkDown2HTML:
                 self.has_opened_p_tag = False
                 return "</p>"
             else:
-                output = "\n<br/>\n{}".format(line)
+                prev_parsed_line = self.output_file_lines[len(self.output_file_lines) - 1]
+
+                if self.is_closing_html_tag(prev_parsed_line):
+                    output = "{}".format(line)
+                else:
+                    output = "\n<br/>\n{}".format(line)
+
                 return self.return_closing_p_tag(index, output)
         return line
 
