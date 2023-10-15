@@ -172,6 +172,14 @@ class MarkDown2HTML:
         return line
 
     def is_next_line_list(self, index):
+        """
+        Checks if the next line to parse is member of a list
+
+        Args:
+             index (int): the line number being parsed
+
+        Returns (bool): True IF is member of list ELSE, False
+        """
         if index + 1 < len(self.input_file_lines):
             next_line = self.input_file_lines[index + 1]
             if next_line.startswith('*') or next_line.startswith('-'):
@@ -179,6 +187,14 @@ class MarkDown2HTML:
         return False
 
     def is_last_empty_line(self, index):
+        """
+        Checks if the current line being parsed is not empty
+
+        Args:
+             index (int): the line number being parsed
+
+        Returns (bool): True IF is member of list ELSE, False
+        """
         if self.input_file_lines[index] == "":
             return True
         return False
@@ -230,16 +246,41 @@ class MarkDown2HTML:
 
     @staticmethod
     def is_opening_html_tag(input_string):
+        """
+        Checks if the current line starts with an opening HTML tag
+
+        Args:
+            index (int): The current line number being parsed
+
+        Returns (bool): True IF starts with opening tag, ELSE False
+        """
         opening_tag_pattern = r'^<[^/!][^>]*>'
         return re.search(opening_tag_pattern, input_string)
 
     @staticmethod
     def is_closing_html_tag(input_string):
+        """
+        Checks if the current line starts with a closing HTML tag
+
+        Args:
+            index (int): The current line number being parsed
+
+        Returns (bool): True IF starts with closing tag, ELSE False
+        """
         closing_tag_pattern = r'^<\/[a-zA-Z][a-zA-Z0-9]*>'
         return re.search(closing_tag_pattern, input_string)
 
     @staticmethod
     def insert_after_ul_or_ol(html_string, insert_string):
+        """
+        Inserts string after <ul>, <ol> tags
+
+        Args:
+            html_string (string): The current HTML string
+            insert_string (string): The string to insert
+
+        Returns (string): The new HTML after insert operation
+        """
         pattern = r'(</(ul|ol)>)'
         replacement = f'\\1{insert_string}'
         result = re.sub(pattern, replacement, html_string)
@@ -247,16 +288,41 @@ class MarkDown2HTML:
 
     @staticmethod
     def parse_bold_text(line):
+        """
+        Parses bold text content
+
+        Args:
+             line (string) : line from input file to parse
+
+        Returns (string): The parsed markdown string
+        """
         bold_pattern = r'\*\*(.*?)\*\*'
         return re.sub(bold_pattern, r'<b>\1</b>', line)
 
     @staticmethod
     def parse_em_text(line):
+        """
+        Parses emphasized text content
+
+        Args:
+             line (string) : line from input file to parse
+
+        Returns (string): The parsed markdown string
+        """
         emphasis_pattern = r'__(.*?)__'
         return re.sub(emphasis_pattern, r'<em>\1</em>', line)
 
     @staticmethod
     def parse_double_brackets(input_text):
+        """
+        Parses text in double brackets by removing all c
+        characters (case insensitive) from the content
+
+        Args:
+             line (string) : line from input file to parse
+
+        Returns (string): The parsed markdown string
+        """
         pattern = r'\(\((.*?)\)\)'
         matches = re.findall(pattern, input_text)
         for match in matches:
@@ -269,6 +335,15 @@ class MarkDown2HTML:
 
     @staticmethod
     def parse_double_squared_brackets(input_text):
+        """
+        Parses text in double squared brackets by
+        converting all the text to lower case MD5 hash
+
+        Args:
+             line (string) : line from input file to parse
+
+        Returns (string): The parsed markdown string
+        """
         pattern = r'\[\[(.*?)\]\]'
         matches = re.findall(pattern, input_text)
         for match in matches:
@@ -293,6 +368,14 @@ class MarkDown2HTML:
 
     @staticmethod
     def is_starting_with_inline_element(line):
+        """
+        Checks if the current line starts with an inline HTML tag
+
+        Args:
+            index (int): The current line number being parsed
+
+        Returns (bool): True IF starts with inline HTML tag, ELSE False
+        """
         tags = ['<b>', '<em>']
         for tag in tags:
             if line.startswith(tag):
