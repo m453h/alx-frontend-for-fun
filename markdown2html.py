@@ -32,9 +32,10 @@ class MarkDown2HTML:
         else:
             try:
                 with open(sys.argv[1]) as f:
-                    self.input_file_content = f.read()
+                    self.input_file_lines = f.read().split('\n')
                     self.output_file_path = sys.argv[2]
                     self.output_file_lines = []
+                    self.has_opened_ul_tag = False
             except FileNotFoundError:
                 print("Missing {}".format(sys.argv[1]), file=sys.stderr)
                 exit(1)
@@ -45,10 +46,10 @@ class MarkDown2HTML:
 
         Returns (string): The string containing the HTML output
         """
-        input_file_lines = self.input_file_content.split('\n')
-
-        for line in input_file_lines:
-            self.output_file_lines.append(self.parse_markdown_headings(line))
+        for index, line in enumerate(self.input_file_lines):
+            parsed_line = self.parse_markdown_headings(line)
+            parsed_line = self.parse_unordered_list(parsed_line, index)
+            self.output_file_lines.append(parsed_line)
 
     @staticmethod
     def parse_markdown_headings(line):
@@ -60,14 +61,50 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        levels = ["######", "#####", "####", "###", "##", "#"]
+        levels = ["###### ", "##### ", "#### ", "### ", "## ", "# "]
 
         for level in levels:
             if line.startswith(level):
-                line = line.replace(level, "").strip()
-                output = "<h{}>{}</h{}>".format(len(level), line, len(level))
-                return output
+                line = line.replace(level, "")
+                return "<h{}>{}</h{}>".format(len(level), line, len(level))
         return line
+
+    def parse_unordered_list(self, line, index):
+        """
+        Parses markdown unordered list content
+
+        Args:
+             line (string) : line from input file to parse
+             index (int): the line number being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if line.startswith("- ") and not self.has_opened_ul_tag:
+            self.has_opened_ul_tag = True
+            output = "<ul>\n\t<li>{}</li>".format(line.replace("- ", ""))
+            return self.return_closing_tag(index, output)
+        elif line.startswith("- ") and self.has_opened_ul_tag:
+            output = "\t<li>{}</li>".format(line.replace("- ", ""))
+            return self.return_closing_tag(index, output)
+        elif not line.startswith("- ") and self.has_opened_ul_tag:
+            self.has_opened_ul_tag = False
+            output = "</ul>\n{}".format(line)
+            return output
+        return line
+
+    def return_closing_tag(self, index, output):
+        """
+        Returns closing ul tag based on the rendering status
+
+        Args:
+            index (int): The current iteration number
+            output (string): The current string being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if index == len(self.input_file_lines) - 1:
+            output += "\n</ul>"
+        return output
 
     def save_output_file(self):
         """
