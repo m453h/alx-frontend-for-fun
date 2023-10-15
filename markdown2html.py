@@ -293,10 +293,10 @@ class MarkDown2HTML:
 
     @staticmethod
     def is_starting_with_inline_element(line):
-        tag = line[0:3]
-        elements = ['<b>', 'em']
-        if tag in elements:
-            return {'tag': tag, 'status': True}
+        tags = ['<b>', '<em>']
+        for tag in tags:
+            if line.startswith(tag):
+                return {'tag': tag, 'status': True}
         return {'status': False}
 
 
