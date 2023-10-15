@@ -88,7 +88,7 @@ class MarkDown2HTML:
             return self.return_closing_tag(index, output)
         elif not line.startswith("- ") and self.has_opened_ul_tag:
             self.has_opened_ul_tag = False
-            output = "</ul>\n{}".format(line)
+            output = "</ul>{}".format(line)
             return output
         return line
 
