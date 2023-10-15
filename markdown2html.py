@@ -129,6 +129,8 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
+        if self.is_last_empty_line(index):
+            return line
         if not self.is_opening_html_tag(line) and not self.has_opened_p_tag\
                 and line != "" and not self.is_next_line_list(index):
             self.has_opened_p_tag = True
@@ -142,8 +144,8 @@ class MarkDown2HTML:
                 self.has_opened_p_tag = False
                 return "</p>"
             else:
-                prev_parsed_line = self.output_file_lines[len(self.output_file_lines) - 1]
-
+                limit = len(self.output_file_lines)
+                prev_parsed_line = self.output_file_lines[limit - 1]
                 if self.is_closing_html_tag(prev_parsed_line):
                     output = "{}".format(line)
                 else:
@@ -157,6 +159,11 @@ class MarkDown2HTML:
             next_line = self.input_file_lines[index + 1]
             if next_line.startswith('*') or next_line.startswith('-'):
                 return True
+        return False
+
+    def is_last_empty_line(self, index):
+        if self.input_file_lines[index] == "":
+            return True
         return False
 
     def return_closing_ul_tag(self, index, output):
