@@ -36,6 +36,7 @@ class MarkDown2HTML:
                     self.output_file_path = sys.argv[2]
                     self.output_file_lines = []
                     self.has_opened_ul_tag = False
+                    self.has_opened_ol_tag = False
             except FileNotFoundError:
                 print("Missing {}".format(sys.argv[1]), file=sys.stderr)
                 exit(1)
@@ -82,17 +83,40 @@ class MarkDown2HTML:
         if line.startswith("-") and not self.has_opened_ul_tag:
             self.has_opened_ul_tag = True
             output = "<ul>\n<li>{}</li>".format(line.replace("-", ""))
-            return self.return_closing_tag(index, output)
-        elif line.startswith("- ") and self.has_opened_ul_tag:
+            return self.return_closing_ul_tag(index, output)
+        elif line.startswith("-") and self.has_opened_ul_tag:
             output = "<li>{}</li>".format(line.replace("-", ""))
-            return self.return_closing_tag(index, output)
+            return self.return_closing_ul_tag(index, output)
         elif not line.startswith("-") and self.has_opened_ul_tag:
             self.has_opened_ul_tag = False
             output = "</ul>{}".format(line)
             return output
         return line
 
-    def return_closing_tag(self, index, output):
+    def parse_ordered_list(self, line, index):
+        """
+        Parses markdown ordered list content
+
+        Args:
+             line (string) : line from input file to parse
+             index (int): the line number being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if line.startswith("*") and not self.has_opened_ol_tag:
+            self.has_opened_ol_tag = True
+            output = "<ol>\n<li>{}</li>".format(line.replace("*", ""))
+            return self.return_closing_ol_tag(index, output)
+        elif line.startswith("*") and self.has_opened_ol_tag:
+            output = "<li>{}</li>".format(line.replace("*", ""))
+            return self.return_closing_ol_tag(index, output)
+        elif not line.startswith("*") and self.has_opened_ol_tag:
+            self.has_opened_ol_tag = False
+            output = "</ol>{}".format(line)
+            return output
+        return line
+
+    def return_closing_ul_tag(self, index, output):
         """
         Returns closing ul tag based on the rendering status
 
@@ -104,6 +128,20 @@ class MarkDown2HTML:
         """
         if index == len(self.input_file_lines) - 1:
             output += "\n</ul>"
+        return output
+
+    def return_closing_ol_tag(self, index, output):
+        """
+        Returns closing ul tag based on the rendering status
+
+        Args:
+            index (int): The current iteration number
+            output (string): The current string being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if index == len(self.input_file_lines) - 1:
+            output += "\n</ol>"
         return output
 
     def save_output_file(self):
