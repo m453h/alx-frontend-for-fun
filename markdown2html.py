@@ -108,7 +108,8 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if line.startswith("*") and not self.has_opened_ol_tag:
+        if line.startswith("*") and not self.has_opened_ol_tag and not \
+                line.startswith("**"):
             self.has_opened_ol_tag = True
             output = "<ol>\n<li>{}</li>".format(line.replace("*", ""))
             return self.return_closing_ol_tag(index, output)
@@ -131,8 +132,8 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag\
-                and line != "" and not self.is_next_line_list(index)\
+        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag \
+                and line != "" and not self.is_next_line_list(index) \
                 and not self.is_last_empty_line(index):
             self.has_opened_p_tag = True
             if self.is_closing_html_tag(line):
