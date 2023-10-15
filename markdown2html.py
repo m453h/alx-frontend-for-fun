@@ -111,7 +111,7 @@ class MarkDown2HTML:
         starts_with_inline = self.is_starting_with_inline_element(line)
         modified_line = ""
         if starts_with_inline['status']:
-            modified_line = line.replace(starts_with_inline["tag"], "")
+            modified_line = line.replace(starts_with_inline["tag"], "").strip()
 
         if (line.startswith("*") or (starts_with_inline['status']
                                      and modified_line.startswith("*")))\
