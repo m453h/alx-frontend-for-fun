@@ -112,7 +112,6 @@ class MarkDown2HTML:
         modified_line = ""
         if starts_with_inline['status']:
             modified_line = line.replace(starts_with_inline["tag"], "")
-            print("List parser: ", modified_line)
 
         if (line.startswith("*") or (starts_with_inline['status']
                                      and modified_line.startswith("*")))\
@@ -139,7 +138,14 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag \
+        starts_with_inline = self.is_starting_with_inline_element(line)
+        modified_line = ""
+        if starts_with_inline['status']:
+            modified_line = line.replace(starts_with_inline['tag'], "")
+
+        if (not self.is_opening_html_tag(line) or
+            (starts_with_inline['status']))\
+                and not self.has_opened_p_tag \
                 and line != "" and not self.is_next_line_list(index) \
                 and not self.is_last_empty_line(index):
             self.has_opened_p_tag = True
