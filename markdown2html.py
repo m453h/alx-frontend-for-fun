@@ -52,8 +52,8 @@ class MarkDown2HTML:
             parsed_line = self.parse_bold_text(line)
             parsed_line = self.parse_em_text(parsed_line)
             parsed_line = self.parse_markdown_headings(parsed_line)
-            parsed_line = self.parse_paragraph(parsed_line, index)
             parsed_line = self.parse_unordered_list(parsed_line, index)
+            parsed_line = self.parse_paragraph(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
@@ -139,8 +139,7 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         starts_with_inline = self.is_starting_with_inline_element(line)
-        if line.startswith("-") or line.startswith("*"):
-            return line
+
         if (not self.is_opening_html_tag(line) or
             (starts_with_inline['status']))\
                 and not self.has_opened_p_tag \
