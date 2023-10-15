@@ -53,6 +53,8 @@ class MarkDown2HTML:
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
             parsed_line = self.parse_paragraph(parsed_line, index)
+            parsed_line = self.parse_bold_text(parsed_line)
+            parsed_line = self.parse_em_text(parsed_line)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -226,6 +228,16 @@ class MarkDown2HTML:
         replacement = f'\\1{insert_string}'
         result = re.sub(pattern, replacement, html_string)
         return result
+
+    @staticmethod
+    def parse_bold_text(line):
+        bold_pattern = r'\*\*(.*?)\*\*'
+        return re.sub(bold_pattern, r'<b>\1</b>', line)
+
+    @staticmethod
+    def parse_em_text(line):
+        emphasis_pattern = r'__(.*?)__'
+        return re.sub(emphasis_pattern, r'<em>\1</em>', line)
 
     def save_output_file(self):
         """
