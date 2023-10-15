@@ -52,7 +52,7 @@ class MarkDown2HTML:
             parsed_line = self.parse_markdown_headings(line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
-            parsed_line = self.parse_paragraph(parsed_line, index)
+            # parsed_line = self.parse_paragraph(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -155,7 +155,7 @@ class MarkDown2HTML:
         """
         if index == len(self.input_file_lines) - 1:
             self.has_opened_ul_tag = False
-            output += "\n</ul>"
+            output += "\n</ul>\n"
         return output
 
     def return_closing_ol_tag(self, index, output):
@@ -170,7 +170,7 @@ class MarkDown2HTML:
         """
         if index == len(self.input_file_lines) - 1:
             self.has_opened_ol_tag = False
-            output += "\n</ol>"
+            output += "\n</ol>\n"
         return output
 
     def return_closing_p_tag(self, index, output):
