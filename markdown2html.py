@@ -50,11 +50,12 @@ class MarkDown2HTML:
         """
         for index, line in enumerate(self.input_file_lines):
             parsed_line = self.parse_markdown_headings(line)
+            parsed_line = self.parse_bold_text(parsed_line)
+            parsed_line = self.parse_em_text(parsed_line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
             parsed_line = self.parse_paragraph(parsed_line, index)
-            parsed_line = self.parse_bold_text(parsed_line)
-            parsed_line = self.parse_em_text(parsed_line)
+
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -108,12 +109,14 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if line.startswith("*") and not self.has_opened_ol_tag:
+        starts_with_inline = self.is_starting_with_inline_element(line)
+        if (line.startswith("*") or starts_with_inline['status'])\
+                and not self.has_opened_ol_tag:
             self.has_opened_ol_tag = True
-            output = "<ol>\n<li>{}</li>".format(line.replace("*", "", 1))
+            output = "<ol>\n<li>{}</li>".format(line.replace("*", ""))
             return self.return_closing_ol_tag(index, output)
         elif line.startswith("*") and self.has_opened_ol_tag:
-            output = "<li>{}</li>".format(line.replace("*", "", 1))
+            output = "<li>{}</li>".format(line.replace("*", ""))
             return self.return_closing_ol_tag(index, output)
         elif not line.startswith("*") and self.has_opened_ol_tag:
             self.has_opened_ol_tag = False
@@ -248,6 +251,14 @@ class MarkDown2HTML:
                 output_file.write(line + "\n")
         output_file.close()
         return True
+
+    @staticmethod
+    def is_starting_with_inline_element(line):
+        tag = line[0:3]
+        elements = ['<b>', 'em']
+        if tag in elements:
+            return {'tag': tag, 'status': True}
+        return {'status': False}
 
 
 if __name__ == "__main__":
