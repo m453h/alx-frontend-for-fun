@@ -1,9 +1,17 @@
 #!/usr/bin/python3
 
 """
-This module takes an argument with 2 strings:
- - First argument is the name of the Markdown file
-- Second argument is the output file name
+This module converts Markdown file to HTML
+
+Usage:
+    ./markdown2html.py <input_file> <output_file>
+
+Args:
+ - input_file: name of the input Markdown file
+ - output_file: name of the output HTML file
+
+Example:
+    ./markdown2html.py README.md README.html
 """
 import sys
 
@@ -22,7 +30,7 @@ class MarkDown2HTML:
                 with open(sys.argv[1]) as f:
                     self.input_file_content = f.read()
             except FileNotFoundError:
-                print("Missing {}".format(sys.argv[1]))
+                print("Missing {}".format(sys.argv[1]), file=sys.stderr)
                 exit(1)
 
 
