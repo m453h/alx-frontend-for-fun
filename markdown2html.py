@@ -272,7 +272,7 @@ class MarkDown2HTML:
         pattern = r'\[\[(.*?)\]\]'
         matches = re.findall(pattern, input_text)
         for match in matches:
-            modified_match = match.lower()
+            modified_match = match
             md5 = hashlib.md5()
             md5.update(modified_match.encode())
             modified_match = md5.hexdigest()
