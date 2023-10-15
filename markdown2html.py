@@ -81,10 +81,10 @@ class MarkDown2HTML:
         """
         if line.startswith("- ") and not self.has_opened_ul_tag:
             self.has_opened_ul_tag = True
-            output = "<ul>\n\t<li>{}</li>".format(line.replace("- ", ""))
+            output = "<ul>\n<li>{}</li>".format(line.replace("- ", ""))
             return self.return_closing_tag(index, output)
         elif line.startswith("- ") and self.has_opened_ul_tag:
-            output = "\t<li>{}</li>".format(line.replace("- ", ""))
+            output = "<li>{}</li>".format(line.replace("- ", ""))
             return self.return_closing_tag(index, output)
         elif not line.startswith("- ") and self.has_opened_ul_tag:
             self.has_opened_ul_tag = False
