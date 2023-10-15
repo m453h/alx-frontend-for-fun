@@ -60,7 +60,7 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        levels = ["####", "###", "##", "#"]
+        levels = ["######", "#####", "####", "###", "##", "#"]
 
         for level in levels:
             if line.startswith(level):
