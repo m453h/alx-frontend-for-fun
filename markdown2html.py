@@ -61,11 +61,11 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        levels = ["###### ", "##### ", "#### ", "### ", "## ", "# "]
+        levels = ["######", "#####", "####", "###", "##", "#"]
 
         for level in levels:
             if line.startswith(level):
-                line = line.replace(level, "")
+                line = line.replace(level, "").strip()
                 return "<h{}>{}</h{}>".format(len(level), line, len(level))
         return line
 
