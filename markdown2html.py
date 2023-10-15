@@ -37,6 +37,7 @@ class MarkDown2HTML:
                     self.output_file_lines = []
                     self.has_opened_ul_tag = False
                     self.has_opened_ol_tag = False
+                    self.has_opened_p_tag = False
             except FileNotFoundError:
                 print("Missing {}".format(sys.argv[1]), file=sys.stderr)
                 exit(1)
@@ -51,6 +52,7 @@ class MarkDown2HTML:
             parsed_line = self.parse_markdown_headings(line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
+            parsed_line = self.parse_paragraph(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -117,6 +119,30 @@ class MarkDown2HTML:
             return output
         return line
 
+    def parse_paragraph(self, line, index):
+        """
+        Parses markdown paragraph content
+
+        Args:
+             line (string) : line from input file to parse
+             index (int): the line number being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if not line.startswith("<") and not self.has_opened_p_tag:
+            self.has_opened_p_tag = True
+            output = "<p>\n{}".format(line)
+            return self.return_closing_p_tag(index, output)
+        elif not line.startswith("<") and self.has_opened_p_tag:
+            print(line)
+            if line == "":
+                self.has_opened_p_tag = False
+                return "</p>"
+            else:
+                output = "\n<br/>\n{}".format(line)
+                return self.return_closing_p_tag(index, output)
+        return line
+
     def return_closing_ul_tag(self, index, output):
         """
         Returns closing ul tag based on the rendering status
@@ -128,6 +154,7 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         if index == len(self.input_file_lines) - 1:
+            self.has_opened_ul_tag = False
             output += "\n</ul>"
         return output
 
@@ -142,7 +169,23 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         if index == len(self.input_file_lines) - 1:
+            self.has_opened_ol_tag = False
             output += "\n</ol>"
+        return output
+
+    def return_closing_p_tag(self, index, output):
+        """
+        Returns closing p tag based on the rendering status
+
+        Args:
+            index (int): The current iteration number
+            output (string): The current string being parsed
+
+        Returns (string): The parsed markdown string
+        """
+        if index == len(self.input_file_lines) - 1:
+            self.has_opened_p_tag = False
+            output += "\n</p>"
         return output
 
     def save_output_file(self):
