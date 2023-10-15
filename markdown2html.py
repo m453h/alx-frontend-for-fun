@@ -50,6 +50,7 @@ class MarkDown2HTML:
         for index, line in enumerate(self.input_file_lines):
             parsed_line = self.parse_markdown_headings(line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
+            parsed_line = self.parse_ordered_list(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
