@@ -130,7 +130,7 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         if not self.is_opening_html_tag(line) and not self.has_opened_p_tag\
-                and line != "":
+                and line != "" and not self.is_next_line_list(index):
             self.has_opened_p_tag = True
             if self.is_closing_html_tag(line):
                 output = self.insert_after_ul_or_ol(line, "\n<p>")
@@ -151,6 +151,13 @@ class MarkDown2HTML:
 
                 return self.return_closing_p_tag(index, output)
         return line
+
+    def is_next_line_list(self, index):
+        if index + 1 < len(self.input_file_lines):
+            next_line = self.input_file_lines[index + 1]
+            if next_line.startswith('*') or next_line.startswith('-'):
+                return True
+        return False
 
     def return_closing_ul_tag(self, index, output):
         """
