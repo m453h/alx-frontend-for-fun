@@ -52,7 +52,7 @@ class MarkDown2HTML:
             parsed_line = self.parse_markdown_headings(line)
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
-            # parsed_line = self.parse_paragraph(parsed_line, index)
+            parsed_line = self.parse_paragraph(parsed_line, index)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -92,7 +92,7 @@ class MarkDown2HTML:
             return self.return_closing_ul_tag(index, output)
         elif not line.startswith("-") and self.has_opened_ul_tag:
             self.has_opened_ul_tag = False
-            output = "</ul>{}".format(line)
+            output = "</ul>\n{}".format(line)
             return output
         return line
 
@@ -115,7 +115,7 @@ class MarkDown2HTML:
             return self.return_closing_ol_tag(index, output)
         elif not line.startswith("*") and self.has_opened_ol_tag:
             self.has_opened_ol_tag = False
-            output = "</ol>{}".format(line)
+            output = "</ol>\n{}".format(line)
             return output
         return line
 
@@ -129,12 +129,14 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if not line.startswith("<") and not self.has_opened_p_tag:
+        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag:
             self.has_opened_p_tag = True
-            output = "<p>\n{}".format(line)
+            if self.is_closing_html_tag(line):
+                output = self.insert_after_ul_or_ol(line, "\n<p>")
+            else:
+                output = "<p>\n{}".format(line)
             return self.return_closing_p_tag(index, output)
-        elif not line.startswith("<") and self.has_opened_p_tag:
-            print(line)
+        elif not self.is_opening_html_tag(line) and self.has_opened_p_tag:
             if line == "":
                 self.has_opened_p_tag = False
                 return "</p>"
@@ -187,6 +189,23 @@ class MarkDown2HTML:
             self.has_opened_p_tag = False
             output += "\n</p>"
         return output
+
+    @staticmethod
+    def is_opening_html_tag(input_string):
+        opening_tag_pattern = r'^<[^/!][^>]*>'
+        return re.search(opening_tag_pattern, input_string)
+
+    @staticmethod
+    def is_closing_html_tag(input_string):
+        closing_tag_pattern = r'^<\/[a-zA-Z][a-zA-Z0-9]*>'
+        return re.search(closing_tag_pattern, input_string)
+
+    @staticmethod
+    def insert_after_ul_or_ol(html_string, insert_string):
+        pattern = r'(</(ul|ol)>)'
+        replacement = f'\\1{insert_string}'
+        result = re.sub(pattern, replacement, html_string)
+        return result
 
     def save_output_file(self):
         """
