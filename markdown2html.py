@@ -117,10 +117,10 @@ class MarkDown2HTML:
                                      and modified_line.startswith("*")))\
                 and not self.has_opened_ol_tag:
             self.has_opened_ol_tag = True
-            output = "<ol>\n<li>{}</li>".format(line.replace("*", "").strip())
+            output = "<ol>\n<li>{}</li>".format(line.lstrip("*"))
             return self.return_closing_ol_tag(index, output)
         elif line.startswith("*") and self.has_opened_ol_tag:
-            output = "<li>{}</li>".format(line.replace("*", "").strip())
+            output = "<li>{}</li>".format(line.lstrip("*"))
             return self.return_closing_ol_tag(index, output)
         elif not line.startswith("*") and self.has_opened_ol_tag:
             self.has_opened_ol_tag = False
