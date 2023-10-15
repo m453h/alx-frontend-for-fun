@@ -129,7 +129,8 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag:
+        if not self.is_opening_html_tag(line) and not self.has_opened_p_tag\
+                and line != "":
             self.has_opened_p_tag = True
             if self.is_closing_html_tag(line):
                 output = self.insert_after_ul_or_ol(line, "\n<p>")
