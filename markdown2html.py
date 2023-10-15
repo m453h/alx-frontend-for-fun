@@ -79,14 +79,14 @@ class MarkDown2HTML:
 
         Returns (string): The parsed markdown string
         """
-        if line.startswith("- ") and not self.has_opened_ul_tag:
+        if line.startswith("-") and not self.has_opened_ul_tag:
             self.has_opened_ul_tag = True
-            output = "<ul>\n<li>{}</li>".format(line.replace("- ", ""))
+            output = "<ul>\n<li>{}</li>".format(line.replace("-", ""))
             return self.return_closing_tag(index, output)
         elif line.startswith("- ") and self.has_opened_ul_tag:
-            output = "<li>{}</li>".format(line.replace("- ", ""))
+            output = "<li>{}</li>".format(line.replace("-", ""))
             return self.return_closing_tag(index, output)
-        elif not line.startswith("- ") and self.has_opened_ul_tag:
+        elif not line.startswith("-") and self.has_opened_ul_tag:
             self.has_opened_ul_tag = False
             output = "</ul>{}".format(line)
             return output
