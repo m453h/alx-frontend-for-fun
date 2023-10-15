@@ -14,7 +14,8 @@ class MarkDown2HTML:
         Initialize a new instance of Markdown2HTML class
         """
         if len(sys.argv) < 3:
-            print('Usage: ./markdown2html.py README.md README.html', file=sys.stderr)
+            print('Usage: ./markdown2html.py README.md README.html',
+                  file=sys.stderr)
             exit(1)
         else:
             try:
