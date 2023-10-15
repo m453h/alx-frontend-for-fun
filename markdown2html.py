@@ -55,7 +55,6 @@ class MarkDown2HTML:
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
             parsed_line = self.parse_paragraph(parsed_line, index)
-
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -110,7 +109,13 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         starts_with_inline = self.is_starting_with_inline_element(line)
-        if (line.startswith("*") or starts_with_inline['status'])\
+        modified_line = ""
+        if starts_with_inline['status']:
+            modified_line = line.replace(starts_with_inline["tag"], "")
+            print("List parser: ", modified_line)
+
+        if (line.startswith("*") or (starts_with_inline['status']
+                                     and modified_line.startswith("*")))\
                 and not self.has_opened_ol_tag:
             self.has_opened_ol_tag = True
             output = "<ol>\n<li>{}</li>".format(line.replace("*", ""))
