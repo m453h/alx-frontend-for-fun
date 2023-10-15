@@ -139,9 +139,6 @@ class MarkDown2HTML:
         Returns (string): The parsed markdown string
         """
         starts_with_inline = self.is_starting_with_inline_element(line)
-        modified_line = ""
-        if starts_with_inline['status']:
-            modified_line = line.replace(starts_with_inline['tag'], "")
 
         if (not self.is_opening_html_tag(line) or
             (starts_with_inline['status']))\
@@ -154,7 +151,9 @@ class MarkDown2HTML:
             else:
                 output = "<p>\n{}".format(line)
             return self.return_closing_p_tag(index, output)
-        elif not self.is_opening_html_tag(line) and self.has_opened_p_tag:
+        elif (not self.is_opening_html_tag(line)
+              or starts_with_inline['status'])\
+                and self.has_opened_p_tag:
             if line == "":
                 self.has_opened_p_tag = False
                 return "</p>"
