@@ -56,8 +56,8 @@ class MarkDown2HTML:
             parsed_line = self.parse_unordered_list(parsed_line, index)
             parsed_line = self.parse_ordered_list(parsed_line, index)
             parsed_line = self.parse_paragraph(parsed_line, index)
-            parsed_line = self.parse_text_in_double_brackets(parsed_line)
-            parsed_line = self.parse_text_in_double_squared_brackets(parsed_line)
+            parsed_line = self.parse_double_brackets(parsed_line)
+            parsed_line = self.parse_double_squared_brackets(parsed_line)
             self.output_file_lines.append(parsed_line)
 
     @staticmethod
@@ -256,18 +256,19 @@ class MarkDown2HTML:
         return re.sub(emphasis_pattern, r'<em>\1</em>', line)
 
     @staticmethod
-    def parse_text_in_double_brackets(input_text):
+    def parse_double_brackets(input_text):
         pattern = r'\(\((.*?)\)\)'
         matches = re.findall(pattern, input_text)
         for match in matches:
             modified_match = match.replace("c", "")
             modified_match = modified_match.replace("C", "")
-            input_text = input_text.replace("(({}))".format(match), modified_match)
+            input_text = input_text\
+                .replace("(({}))".format(match), modified_match)
 
         return input_text
 
     @staticmethod
-    def parse_text_in_double_squared_brackets(input_text):
+    def parse_double_squared_brackets(input_text):
         pattern = r'\[\[(.*?)\]\]'
         matches = re.findall(pattern, input_text)
         for match in matches:
@@ -275,7 +276,8 @@ class MarkDown2HTML:
             md5 = hashlib.md5()
             md5.update(modified_match.encode())
             modified_match = md5.hexdigest()
-            input_text = input_text.replace("[[{}]]".format(match), modified_match)
+            input_text = input_text\
+                .replace("[[{}]]".format(match), modified_match)
 
         return input_text
 
