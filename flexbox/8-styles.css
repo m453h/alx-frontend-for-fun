@@ -357,6 +357,11 @@
   }
   
   .section-hero .section-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 50vh;
     padding: 10rem 40rem 2rem 0;
   }
 
