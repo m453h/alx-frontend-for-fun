@@ -71,7 +71,7 @@
     --nav-item-font-size: var(--font-size-medium);
     --nav-item-letter-spacing: .04rem;
     --nav-item-display: inline-block;
-    --nav-item-margin: 0 2rem 0 0;
+    --nav-item-margin: 0 0 0 2rem;
     --nav-item-link-hover: var(--color-white);
   
     /** BUTTON **/
@@ -201,11 +201,11 @@
       ============================= */
 
   .nav {
+    display: flex;
     margin: 0;
     padding: 0;
     list-style: none;
     text-align: center;
-    display: flex;
   }
   
   .nav .nav-item {
@@ -213,7 +213,6 @@
     font-weight: var(--nav-item-font-weight);
     font-size: var(--nav-item-font-size);
     letter-spacing: var(--nav-item-letter-spacing);
-    margin: var(--nav-item-margin);
   }
   
   .nav .nav-link {
@@ -244,7 +243,7 @@
   }
   
   .nav .nav-item + .nav-item {
-    --nav-item-margin: 0 0 0 2rem;
+    margin: var(--nav-item-margin);
   }
   /* Header
       ============================= */
