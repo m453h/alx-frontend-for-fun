@@ -821,7 +821,7 @@ textarea:valid:not(:placeholder-shown) {
     position: relative;
 }
 
-.search-button {
+.form-search .search-button {
     display: inline-block;
     background: transparent;
     border: 0;
