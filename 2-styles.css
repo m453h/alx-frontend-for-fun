@@ -1,0 +1,68 @@
+:root {
+    --color-primary: #E11E3C;
+    --color-white: #FFFFFF;
+    --color-dark-grey: #C8C8C8;
+    --color-light-grey: #C3C3C3;
+}
+
+.toggle-cb {
+    display: none;
+}
+
+.toggle-label {
+    font-family: sans-serif;
+    position: relative;
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    font-size: 1.5rem;
+}
+
+.toggle-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    cursor: pointer;
+    border: 1px solid var(--color-dark-grey);
+    border-radius: 20px;
+}
+
+.toggle-switch {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    border: 1px solid var(--color-dark-grey);
+    border-radius: 50%;
+    background-color: var(--color-white);
+}
+
+.toggle-cb:not(:checked) + .toggle-label .toggle-inner {
+    background-color: #EBEBEB;
+}
+
+.toggle-cb:not(:checked) + .toggle-label .toggle-inner::before {
+    content: "No";
+    top: 7px;
+    right: -62px;
+    color: #C3C3C3;
+    position: relative;
+}
+
+.toggle-cb:checked + .toggle-label .toggle-inner {
+    background-color: var(--color-primary);
+}
+
+.toggle-cb:checked + .toggle-label .toggle-inner::before {
+    content: "Yes";
+    color: var(--color-white);
+    position: relative;
+    top: 6px;
+    left: 15px;
+}
+
+.toggle-cb:checked + .toggle-label .toggle-switch {
+    transform: translateX(70px);
+}
