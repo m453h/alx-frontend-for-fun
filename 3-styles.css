@@ -1,0 +1,99 @@
+:root {
+    --color-primary: #C81938;
+    --color-primary-dark: #A41835;
+    --color-white: #FFFFFF;
+    --color-dark-grey: #C8C8C8;
+    --color-light-grey: #C3C3C3;
+    --menu-item-dimension: 60px;
+}
+
+.menu {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 2%;
+    width: 150px;
+    height: 150px;
+    transition: .3s ease;
+}
+
+.menu-open {
+    display: none;
+}
+
+.menu:has(.menu-open:checked) {
+    height: 500px;
+    transition: .3s ease;
+}
+
+.menu-open-button {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary-dark);
+    cursor: pointer;
+    width: calc(var(--menu-item-dimension) + var(--menu-item-dimension)/3);
+    height: calc(var(--menu-item-dimension) + var(--menu-item-dimension)/3);
+    border-radius: 50%;
+    transition: .3s ease;
+}
+
+.menu-open:not(:checked) + .menu-open-button:hover {
+    transition: .3s ease;
+    transform: scale(1.2);
+}
+
+.menu-open:checked + .menu-open-button {
+    height: var(--menu-item-dimension);
+    width: var(--menu-item-dimension);
+    margin-bottom: 1rem;
+}
+
+.menu-line {
+    width: 32px;
+    height: 3px;
+    margin: 3px;
+    background-color: var(--color-white);
+}
+
+.menu-open:checked + .menu-open-button .menu-line-1 {
+    transform: rotate(45deg);
+    height: 2px;
+    width: 24px;
+    position: absolute;
+}
+
+.menu-open:checked + .menu-open-button .menu-line-2 {
+    transform: rotate(-45deg);
+    height: 2px;
+    width: 24px;
+    position: absolute;
+}
+
+.menu-open:checked + .menu-open-button .menu-line-3 {
+    display: none;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    height: var(--menu-item-dimension);
+    width: var(--menu-item-dimension);
+    border: 1px solid var(--color-primary-dark);
+    border-radius: 50%;
+}
+
+.menu-item:hover {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+}
+
+.menu-open:not(:checked) ~ .menu-item {
+    display: none;
+}
