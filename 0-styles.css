@@ -1,6 +1,10 @@
+ul {
+    display: flex;
+    justify-content: center;
+}
+
 li {
-    width: 280px;
-    display: inline-block;
+    list-style: none;
     margin-right: 3rem;
     border: 2px solid #8D8D8D;
     border-radius: 0.75rem;
@@ -14,6 +18,7 @@ li {
 
 span.icon {
     height: 400px;
+    width: 280px;
     display: block;
     margin-top: 1.5rem;
     background-image: url("0-sprite.png");
