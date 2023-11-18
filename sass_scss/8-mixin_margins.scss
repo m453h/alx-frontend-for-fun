@@ -1,0 +1,14 @@
+/* Margin mixin */
+
+@mixin custom-margin($value) {
+  margin-left: $value;
+  margin-right: $value;
+}
+
+body {
+  @include custom-margin(10px);
+}
+
+div {
+  @include custom-margin(15px);
+}
