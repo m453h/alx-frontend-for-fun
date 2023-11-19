@@ -1,0 +1,57 @@
+/* Sort strings */
+
+@import '103-sort_list';
+
+@function compare-strings($a, $b) {
+    $order:
+    "a" "b" "c" "d" "e" "f" 
+    "g" "h" "i" "j" "k" "l"
+    "m" "n" "o" "p" "q" "r" 
+    "s" "t" "u" "v" "w" "x" 
+    "y" "z";
+    
+    $a: to-lower-case($a + unquote(""));
+    $b: to-lower-case($b + unquote(""));
+  
+    @for $i from 1 through min(str-length($a), str-length($b)) {
+      $char-a: str-slice($a, $i, $i);
+      $char-b: str-slice($b, $i, $i);
+  
+      @if $char-a and $char-b and index($order, $char-a) != index($order, $char-b) {
+        @return index($order, $char-a) < index($order, $char-b);
+      }
+    }
+  
+    @return str-length($a) < str-length($b);
+}
+
+@function quick-sort($list) {
+
+    @if (length($list) <= 1) {
+        @return $list;
+    }
+
+    $less-list:  ();
+    $equal-list: ();
+    $large-list: ();
+  
+    @if length($list) > 1 {
+      $seed: nth($list, ceil(length($list) / 2));
+  
+      @each $item in $list {
+        @if $item == $seed {
+          $equal-list: append($equal-list, $item, list-separator($list));
+        } @else if compare-strings($item, $seed) {
+          $less-list: append($less-list, $item, list-separator($list));
+        } @else if not compare-strings($item, $seed) {
+          $large-list: append($large-list, $item, list-separator($list));
+        }
+      }
+  
+      @return join(join(quick-sort($less-list), $equal-list), quick-sort($large-list));
+    }
+    @return $list;
+}
+
+$sorted_list: quick-sort($list_to_sort);
+@debug "#{$sorted_list}";
