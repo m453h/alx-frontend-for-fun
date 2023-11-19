@@ -25,33 +25,30 @@
     @return str-length($a) < str-length($b);
 }
 
-@function quick-sort($list) {
-
-    @if (length($list) <= 1) {
-        @return $list;
-    }
-
-    $less-list:  ();
-    $equal-list: ();
-    $large-list: ();
+@function bubble-sort($names) {
+    $n: length($names);
   
-    @if length($list) > 1 {
-      $seed: nth($list, ceil(length($list) / 2));
+    @for $i from 1 through $n {
+      $swapped: false;
   
-      @each $item in $list {
-        @if $item == $seed {
-          $equal-list: append($equal-list, $item, list-separator($list));
-        } @else if compare-strings($item, $seed) {
-          $less-list: append($less-list, $item, list-separator($list));
-        } @else if not compare-strings($item, $seed) {
-          $large-list: append($large-list, $item, list-separator($list));
+      @for $j from 1 through $n - $i {
+        $item-a: nth($names, $j);
+        $item-b: nth($names, $j + 1);
+  
+        @if compare-strings($item-b, $item-a) {
+          $names: set-nth($names, $j, $item-b);
+          $names: set-nth($names, $j + 1, $item-a);
+          $swapped: true;
         }
       }
   
-      @return join(join(quick-sort($less-list), $equal-list), quick-sort($large-list));
+      @if not $swapped {
+        @return $names;
+      }
     }
-    @return $list;
+  
+    @return $names;
 }
 
-$sorted_list: quick-sort($list_to_sort);
+$sorted_list: bubble-sort($list_to_sort);
 @debug "#{$sorted_list}";
