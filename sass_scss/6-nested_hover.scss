@@ -2,9 +2,9 @@
 changes button text color on hover */
 
 button {
-    background: #FF0000;
+    color: #ff0000;
 
     &:hover {
-        background: #00FF00;
+        color: #00ff00;
     }
 }
